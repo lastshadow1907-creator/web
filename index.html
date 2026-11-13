@@ -80,7 +80,7 @@
 
         h1 {
             font-family: 'Sacramento', cursive;
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             color: var(--accent-color);
             margin-bottom: 5px;
         }
@@ -88,6 +88,7 @@
         h3 {
             color: var(--accent-color);
             margin-bottom: 10px;
+            font-size: 1.2rem;
         }
 
         p {
@@ -131,19 +132,22 @@
             font-size: 0.9rem;
         }
 
-        .shared-section {
+        input[type="text"], textarea {
+            width: 100%;
             background: var(--bg-color);
-            padding: 15px;
-            border-radius: 12px;
             border: 1px solid var(--border-color);
-            margin-top: 15px;
-            text-align: left;
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+            outline: none;
+            font-size: 0.9rem;
         }
 
-        .shared-section p {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            line-height: 1.5;
+        textarea {
+            height: 80px;
+            resize: none;
         }
 
         button.primary-btn {
@@ -154,12 +158,37 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
-            text-decoration: none;
-            display: inline-block;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 0.95rem;
         }
 
         button.primary-btn:hover {
             background-color: var(--accent-hover);
+        }
+
+        .message-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .message-item {
+            background: var(--bg-color);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .message-item strong {
+            color: var(--accent-color);
+            display: block;
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -168,7 +197,7 @@
     <button class="theme-toggle" onclick="toggleTheme()">🌙 Tema Değiş</button>
 
     <div class="container">
-        <!-- Başlık ve İlişki Sayacı -->
+        <!-- Başlık, Sayaç ve Yıldönümü -->
         <div class="card">
             <h1>Muly & Olcay</h1>
             <p>Birlikte Geçen Sonsuz Zamanımız ❤️</p>
@@ -179,23 +208,20 @@
                 <div class="time-box"><span id="seconds">0</span><label>Saniye</label></div>
             </div>
             
-            <!-- Yıldönümüne Kalan Süre -->
             <div class="anniversary-banner" id="anniversaryCountdown">
                 Yıldönümümüze kalan süre hesaplanıyor... ✨
             </div>
         </div>
 
-        <!-- Ortak Mektup ve Yapılacaklar Listesi Alanı -->
+        <!-- Site İçi Ortak Mektup ve Not Panosu -->
         <div class="card">
-            <h3>Ortak Mektup & Yapılacaklar Listemiz ❤️</h3>
-            <div class="shared-section">
-                <p>İkinizin de ortakça yazışabileceği, gizli mektuplar bırakabileceği ve beraber yapmak istediklerinizi listeleyebileceğiniz ortak panonuz burada yer alır.</p>
-                <p><b>Nasıl Kullanılır?</b> Ortak belgenizi oluşturup aşağıdaki butona tıklayarak her iki cihazdan da anında düzenleyebilirsiniz!</p>
-                
-                <!-- Buraya kendi ortak Google Docs / Google Keep veya not linkinizi koyabilirsiniz -->
-                <a href="https://docs.google.com" target="_blank">
-                    <button class="primary-btn">Ortak Panoyu Aç 🚀</button>
-                </a>
+            <h3>Bizim Mektup & Not Panomuz ❤️</h3>
+            <input type="text" id="senderName" placeholder="Adın (Muly veya Olcay)">
+            <textarea id="noteInput" placeholder="Buraya tatlı bir mektup, not veya yapılacaklar listesi yazabilirsin..."></textarea>
+            <button class="primary-btn" onclick="addMessage()">Panoya Ekle ✨</button>
+
+            <div class="message-list" id="messageList">
+                <!-- Yazılanlar doğrudan sitede liste halinde görünecek -->
             </div>
         </div>
     </div>
@@ -206,7 +232,7 @@
         function updateCounters() {
             const now = new Date();
             
-            // 1. İlişki Sayacı
+            // İlişki Sayacı
             const diff = now - startDate;
             if (diff > 0) {
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -220,7 +246,7 @@
                 document.getElementById("seconds").innerText = seconds;
             }
 
-            // 2. Yıldönümüne Kalan Süre (Her yıl 14 Mart)
+            // Yıldönümüne Kalan Süre
             const currentYear = now.getFullYear();
             let nextAnniversary = new Date(currentYear, 2, 14, 0, 8, 0); 
             
@@ -249,9 +275,46 @@
             localStorage.setItem("theme", newTheme);
         }
 
+        // Pano Mesajlarını Yönetme
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem("romanticMessages")) || [];
+            const listContainer = document.getElementById("messageList");
+            listContainer.innerHTML = "";
+
+            if (messages.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; opacity:0.6; font-size:0.85rem; padding: 10px;">Henüz bir mektup veya not eklenmemiş. İlk tatlı sözü sen yaz! ❤️</p>';
+                return;
+            }
+
+            messages.forEach((msg) => {
+                const div = document.createElement("div");
+                div.className = "message-item";
+                div.innerHTML = `<strong>${msg.name}</strong> ${msg.text}`;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function addMessage() {
+            const name = document.getElementById("senderName").value.trim();
+            const text = document.getElementById("noteInput").value.trim();
+
+            if (!name || !text) {
+                alert("Lütfen adını ve mesajını yaz knk! 😊");
+                return;
+            }
+
+            const messages = JSON.parse(localStorage.getItem("romanticMessages")) || [];
+            messages.unshift({ name: name, text: text });
+            localStorage.setItem("romanticMessages", JSON.stringify(messages));
+
+            document.getElementById("noteInput").value = "";
+            loadMessages();
+        }
+
         window.onload = function() {
             const savedTheme = localStorage.getItem("theme") || "light";
-            body.setAttribute("data-theme", savedTheme);
+            document.body.setAttribute("data-theme", savedTheme);
+            loadMessages();
         };
     </script>
 </body>
