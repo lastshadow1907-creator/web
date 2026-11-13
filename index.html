@@ -51,7 +51,7 @@
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             color: var(--text-color);
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: 500;
@@ -66,7 +66,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-top: 45px;
+            margin-top: 50px;
         }
 
         .card {
@@ -87,8 +87,9 @@
 
         h3 {
             color: var(--accent-color);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 1.2rem;
+            font-weight: 600;
         }
 
         p {
@@ -146,7 +147,7 @@
         }
 
         textarea {
-            height: 80px;
+            height: 90px;
             resize: none;
         }
 
@@ -154,11 +155,11 @@
             background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 11px 20px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
-            margin-top: 10px;
+            margin-top: 12px;
             width: 100%;
             font-size: 0.95rem;
         }
@@ -213,12 +214,12 @@
             </div>
         </div>
 
-        <!-- Site İçi Ortak Mektup ve Not Panosu -->
+        <!-- Site İçi Mektup ve Not Panosu -->
         <div class="card">
-            <h3>Bizim Mektup & Not Panomuz ❤️</h3>
+            <h3>Bizim Romantik Not & Mektup Panomuz ❤️</h3>
             <input type="text" id="senderName" placeholder="Adın (Muly veya Olcay)">
-            <textarea id="noteInput" placeholder="Buraya tatlı bir mektup, not veya yapılacaklar listesi yazabilirsin..."></textarea>
-            <button class="primary-btn" onclick="addMessage()">Panoya Ekle ✨</button>
+            <textarea id="noteInput" placeholder="Buraya tatlı bir mektup veya yapılacaklar listesi yazabilirsin..."></textarea>
+            <button class="primary-btn" onclick="addMessage()">Notu / Mektubu Ekle ✨</button>
 
             <div class="message-list" id="messageList">
                 <!-- Yazılanlar doğrudan sitede liste halinde görünecek -->
@@ -277,7 +278,7 @@
 
         // Pano Mesajlarını Yönetme
         function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem("romanticMessages")) || [];
+            const messages = JSON.parse(localStorage.getItem("finalRomanticBoard")) || [];
             const listContainer = document.getElementById("messageList");
             listContainer.innerHTML = "";
 
@@ -303,9 +304,9 @@
                 return;
             }
 
-            const messages = JSON.parse(localStorage.getItem("romanticMessages")) || [];
+            const messages = JSON.parse(localStorage.getItem("finalRomanticBoard")) || [];
             messages.unshift({ name: name, text: text });
-            localStorage.setItem("romanticMessages", JSON.stringify(messages));
+            localStorage.setItem("finalRomanticBoard", JSON.stringify(messages));
 
             document.getElementById("noteInput").value = "";
             loadMessages();
