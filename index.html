@@ -41,7 +41,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .theme-toggle {
@@ -61,12 +61,12 @@
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-top: 40px;
+            margin-top: 45px;
         }
 
         .card {
@@ -83,6 +83,11 @@
             font-size: 3.5rem;
             color: var(--accent-color);
             margin-bottom: 5px;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
         }
 
         p {
@@ -106,31 +111,39 @@
 
         .time-box span {
             display: block;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--accent-color);
         }
 
         .time-box label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             opacity: 0.8;
         }
 
-        input[type="text"], textarea {
-            width: 100%;
+        .anniversary-banner {
             background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
             padding: 12px;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            margin-top: 10px;
-            outline: none;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            margin-top: 15px;
+            font-size: 0.9rem;
         }
 
-        textarea {
-            height: 90px;
-            resize: none;
+        .shared-section {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .shared-section p {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
 
         button.primary-btn {
@@ -141,36 +154,12 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
-            margin-top: 10px;
-            width: 100%;
+            text-decoration: none;
+            display: inline-block;
         }
 
         button.primary-btn:hover {
             background-color: var(--accent-hover);
-        }
-
-        .message-list {
-            margin-top: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            text-align: left;
-        }
-
-        .message-item {
-            background: var(--bg-color);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            font-size: 0.9rem;
-        }
-
-        .message-item strong {
-            color: var(--accent-color);
-            display: block;
-            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -179,7 +168,7 @@
     <button class="theme-toggle" onclick="toggleTheme()">🌙 Tema Değiş</button>
 
     <div class="container">
-        <!-- Başlık ve Sayaç -->
+        <!-- Başlık ve İlişki Sayacı -->
         <div class="card">
             <h1>Muly & Olcay</h1>
             <p>Birlikte Geçen Sonsuz Zamanımız ❤️</p>
@@ -189,17 +178,24 @@
                 <div class="time-box"><span id="minutes">0</span><label>Dakika</label></div>
                 <div class="time-box"><span id="seconds">0</span><label>Saniye</label></div>
             </div>
+            
+            <!-- Yıldönümüne Kalan Süre -->
+            <div class="anniversary-banner" id="anniversaryCountdown">
+                Yıldönümümüze kalan süre hesaplanıyor... ✨
+            </div>
         </div>
 
-        <!-- Ortak Mektup / Not Panosu -->
+        <!-- Ortak Mektup ve Yapılacaklar Listesi Alanı -->
         <div class="card">
-            <h3>Ortak Not & Mektup Panosu ❤️</h3>
-            <input type="text" id="senderName" placeholder="Adınız (Muly veya Olcay)">
-            <textarea id="noteInput" placeholder="Buraya ortak bir mektup veya not yazın..."></textarea>
-            <button class="primary-btn" onclick="addMessage()">Not Ekle ve Listele</button>
-
-            <div class="message-list" id="messageList">
-                <!-- Yazılanlar burada liste halinde görünecek -->
+            <h3>Ortak Mektup & Yapılacaklar Listemiz ❤️</h3>
+            <div class="shared-section">
+                <p>İkinizin de ortakça yazışabileceği, gizli mektuplar bırakabileceği ve beraber yapmak istediklerinizi listeleyebileceğiniz ortak panonuz burada yer alır.</p>
+                <p><b>Nasıl Kullanılır?</b> Ortak belgenizi oluşturup aşağıdaki butona tıklayarak her iki cihazdan da anında düzenleyebilirsiniz!</p>
+                
+                <!-- Buraya kendi ortak Google Docs / Google Keep veya not linkinizi koyabilirsiniz -->
+                <a href="https://docs.google.com" target="_blank">
+                    <button class="primary-btn">Ortak Panoyu Aç 🚀</button>
+                </a>
             </div>
         </div>
     </div>
@@ -207,10 +203,11 @@
     <script>
         const startDate = new Date("2026-03-14T00:08:00");
 
-        function updateCounter() {
+        function updateCounters() {
             const now = new Date();
+            
+            // 1. İlişki Sayacı
             const diff = now - startDate;
-
             if (diff > 0) {
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -222,10 +219,28 @@
                 document.getElementById("minutes").innerText = minutes;
                 document.getElementById("seconds").innerText = seconds;
             }
-        }
-        setInterval(updateCounter, 1000);
-        updateCounter();
 
+            // 2. Yıldönümüne Kalan Süre (Her yıl 14 Mart)
+            const currentYear = now.getFullYear();
+            let nextAnniversary = new Date(currentYear, 2, 14, 0, 8, 0); 
+            
+            if (now > nextAnniversary) {
+                nextAnniversary = new Date(currentYear + 1, 2, 14, 0, 8, 0);
+            }
+
+            const annivDiff = nextAnniversary - now;
+            const annivDays = Math.floor(annivDiff / (1000 * 60 * 60 * 24));
+            const annivHours = Math.floor((annivDiff / (1000 * 60 * 60)) % 24);
+            const annivMins = Math.floor((annivDiff / 1000 / 60) % 60);
+
+            document.getElementById("anniversaryCountdown").innerHTML = 
+                `🎉 Gelecek Yıldönümümüze: <b>${annivDays} gün ${annivHours} saat ${annivMins} dakika</b> kaldı!`;
+        }
+
+        setInterval(updateCounters, 1000);
+        updateCounters();
+
+        // Tema Değiştirici
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute("data-theme");
@@ -234,46 +249,9 @@
             localStorage.setItem("theme", newTheme);
         }
 
-        // Notları Kaydetme ve Listeleme Sistemi
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem("sharedMessages")) || [];
-            const listContainer = document.getElementById("messageList");
-            listContainer.innerHTML = "";
-
-            if (messages.length === 0) {
-                listContainer.innerHTML = '<p style="text-align:center; opacity:0.6; font-size:0.85rem;">Henüz bir not eklenmemiş. İlk notu sen yaz! ❤️</p>';
-                return;
-            }
-
-            messages.forEach((msg) => {
-                const div = document.createElement("div");
-                div.className = "message-item";
-                div.innerHTML = `<strong>${msg.name}</strong> ${msg.text}`;
-                listContainer.appendChild(div);
-            });
-        }
-
-        function addMessage() {
-            const name = document.getElementById("senderName").value.trim();
-            const text = document.getElementById("noteInput").value.trim();
-
-            if (!name || !text) {
-                alert("Lütfen adınızı ve mesajınızı yazın knk!");
-                return;
-            }
-
-            const messages = JSON.parse(localStorage.getItem("sharedMessages")) || [];
-            messages.unshift({ name: name, text: text }); // En yeni eklenen üste gelir
-            localStorage.setItem("sharedMessages", JSON.stringify(messages));
-
-            document.getElementById("noteInput").value = "";
-            loadMessages();
-        }
-
         window.onload = function() {
             const savedTheme = localStorage.getItem("theme") || "light";
-            document.body.setAttribute("data-theme", savedTheme);
-            loadMessages();
+            body.setAttribute("data-theme", savedTheme);
         };
     </script>
 </body>
