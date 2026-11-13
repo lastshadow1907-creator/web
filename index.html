@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonsuza Kadar ❤︎ Bizim Hikayemiz</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        handwriting: ['"Caveat"', 'cursive']
+                    },
+                    colors: {
+                        romance: {
+                            50: '#fdf8f9',
+                            100: '#fbeef1',
+                            200: '#f5d6de',
+                            300: '#eeb3c1',
+                            500: '#d96b84',
+                            600: '#c24d68',
+                            800: '#9e3b52'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.9); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+        .animate-fade-in-out {
+            animation: fadeInOut 4s ease-in-out forwards;
+        }
+        /* Özel Kaydırma Çubuğu */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fbeef1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #eeb3c1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d96b84;
+        }
+    </style>
+</head>
+<body id="body-element" class="bg-gradient-to-br from-romance-50 via-purple-50 to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-purple-950 min-h-screen text-slate-700 dark:text-slate-200 font-sans antialiased transition-colors duration-500 selection:bg-romance-200 selection:text-romance-800">
+
+    <!-- GECE MODU BİLDİRİM BALONU (YILDIZIM MESAJI) -->
+    <div id="star-toast" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none hidden">
+        <div class="bg-slate-900/90 dark:bg-slate-800/90 backdrop-blur-xl border border-romance-500/50 text-white px-8 py-6 rounded-3xl shadow-2xl flex flex-col items-center space-y-3 animate-fade-in-out max-w-sm text-center">
+            <i data-lucide="sparkles" class="w-10 h-10 text-yellow-300 animate-pulse"></i>
+            <p class="font-serif text-xl sm:text-2xl font-semibold italic text-romance-200">"Sen parlayarak aydınlattın gecemi, benim güzel yıldızım..."</p>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border-b border-romance-100 dark:border-slate-800 shadow-sm transition-colors duration-500">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-romance-100 dark:bg-slate-800 flex items-center justify-center text-romance-600 dark:text-romance-400 shadow-inner">
+                    <i data-lucide="heart" class="w-5 h-5 fill-romance-500 text-romance-500 animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 id="nav-couple-names" class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Muly &amp; Olcay</h1>
+                    <p class="text-xs text-romance-600 dark:text-romance-400 font-medium">Birlikte Her An</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Ruh Hali Seçici -->
+                <select id="mood-select" onchange="changeMood(this.value)" class="bg-romance-100/80 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-3 py-2 rounded-full text-xs sm:text-sm font-semibold border-none focus:ring-2 focus:ring-romance-500 cursor-pointer shadow-xs">
+                    <option value="😍 Aşık">😍 Aşık</option>
+                    <option value="🥰 Mutlu">🥰 Mutlu</option>
+                    <option value="✨ Romantik">✨ Romantik</option>
+                    <option value="🚀 Heyecanlı">🚀 Heyecanlı</option>
+                    <option value="☕ Huzurlu">☕ Huzurlu</option>
+                </select>
+
+                <!-- Gece Modu Butonu -->
+                <button onclick="toggleDarkMode()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-romance-100 dark:bg-slate-800 hover:bg-romance-200 dark:hover:bg-slate-700 flex items-center justify-center text-romance-800 dark:text-yellow-300 transition-all shadow-sm" title="Gece Modu / Yıldızım">
+                    <i id="theme-icon" data-lucide="moon" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                </button>
+
+                <button onclick="openSettingsModal()" class="flex items-center space-x-1.5 bg-romance-100 dark:bg-slate-800 hover:bg-romance-200 dark:hover:bg-slate-700 text-romance-800 dark:text-slate-200 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shadow-sm">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Ayarlar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16">
+
+        <!-- 1. ÜST KISIM: KAHRAMAN BÖLÜMÜ & CANLI SAYAÇ -->
+        <section class="text-center relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-6 sm:p-12 shadow-xl border border-romance-100 dark:border-slate-800 overflow-hidden transition-colors duration-500">
+            <!-- Arka plan dekoratif kalpler -->
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-romance-100 dark:bg-purple-900/20 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-100 dark:bg-pink-900/20 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+
+            <div class="relative z-10 space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-romance-100/80 dark:bg-slate-800 text-romance-800 dark:text-romance-300 px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium tracking-wide shadow-xs">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span id="anniversary-badge">Yıl Dönümümüze Kalan: Hesaplanıyor...</span>
+                </div>
+
+                <h2 id="hero-title" class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold text-slate-800 dark:text-white tracking-tight">
+                    Muly <span class="text-romance-500 font-normal italic">&amp;</span> Olcay
+                </h2>
+
+                <p id="hero-subtitle" class="text-slate-600 dark:text-slate-300 text-base sm:text-lg max-w-xl mx-auto font-light">
+                    Hayatımın en güzel hikayesini seninle yazıyorum. Her saniye sana biraz daha aşık oluyorum.
+                </p>
+
+                <!-- Canlı Sayaç Kutuları (Yıl, Ay, Gün, Saat, Dakika, Saniye) -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 max-w-4xl mx-auto pt-4">
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-years" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Yıl</span>
+                    </div>
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-months" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Ay</span>
+                    </div>
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-days" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Gün</span>
+                    </div>
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-hours" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Saat</span>
+                    </div>
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-minutes" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Dakika</span>
+                    </div>
+                    <div class="bg-romance-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-romance-200 dark:border-slate-700 rounded-2xl p-3 shadow-sm hover:scale-105 transition-transform duration-300">
+                        <span id="counter-seconds" class="block font-serif text-2xl sm:text-4xl font-bold text-romance-800 dark:text-romance-300">0</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold mt-1 block">Saniye</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ORTA KISIM: POLAROID FOTOĞRAF GALERİSİ -->
+        <section class="space-y-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-romance-200 dark:border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="image" class="w-7 h-7 text-romance-500"></i>
+                        <span>Anı Galerimiz</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">En güzel anılarımızın polaroid kartları</p>
+                </div>
+                <button onclick="openAddPhotoModal()" class="flex items-center space-x-2 bg-romance-600 hover:bg-romance-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Yeni Fotoğraf Ekle</span>
+                </button>
+            </div>
+
+            <!-- Polaroid Grid -->
+            <div id="photo-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+                <!-- JavaScript ile doldurulacak -->
+            </div>
+        </section>
+        <!-- 3. GELECEĞE MEKTUP (ZAMAN KAPSÜLLERİ) -->
+        <section class="space-y-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-romance-200 dark:border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="lock" class="w-7 h-7 text-romance-500"></i>
+                        <span>Geleceğe Mektuplar (Zaman Kapsülleri)</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Belirlediğiniz tarihlere kadar mühürlü kalan özel aşk mektuplarınız</p>
+                </div>
+                <button onclick="openLetterModal()" class="flex items-center space-x-2 bg-romance-600 hover:bg-romance-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Yeni Mektup Ekle</span>
+                </button>
+            </div>
+
+            <!-- Mektuplar Grid -->
+            <div id="letters-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <!-- JavaScript ile doldurulacak -->
+            </div>
+        </section>
+
+        <!-- 4. BUCKET LIST (YAPMAK İSTEDİKLERİMİZ LİSTESİ) -->
+        <section id="bucket-list" class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-xl border border-romance-100 dark:border-slate-800 space-y-8 transition-colors duration-500">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-romance-200 dark:border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="list-checks" class="w-7 h-7 text-romance-500"></i>
+                        <span>Yapmak İstediklerimiz (Bucket List)</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Birlikte gerçekleştirmeyi hayal ettiğimiz harika maceralar</p>
+                </div>
+                <button onclick="openAddBucketModal()" class="flex items-center space-x-2 bg-romance-600 hover:bg-romance-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Yeni Hayal Ekle</span>
+                </button>
+            </div>
+
+            <!-- Bucket List Items -->
+            <div id="bucket-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- JavaScript ile doldurulacak -->
+            </div>
+        </section>
+
+        <!-- 5. ALT KISIM: AŞK NOTLARI KARTLARI -->
+        <section class="space-y-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-romance-200 dark:border-slate-800 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="heart-handshake" class="w-7 h-7 text-romance-500"></i>
+                        <span>Aşk Notlarımız</span>
+                    </h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">İçimizden gelen minik tatlı notlar</p>
+                </div>
+                <button onclick="openAddNoteModal()" class="flex items-center space-x-2 bg-romance-600 hover:bg-romance-800 text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Yeni Not Bırak</span>
+                </button>
+            </div>
+
+            <!-- Notes Grid -->
+            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                <!-- JavaScript ile doldurulacak -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-romance-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md py-8 text-center text-sm text-slate-500 dark:text-slate-400 mt-16 transition-colors duration-500">
+        <div class="flex items-center justify-center space-x-1.5 font-serif text-lg text-slate-700 dark:text-slate-200">
+            <span>Sonsuza Kadar</span>
+            <i data-lucide="heart" class="w-4 h-4 fill-romance-500 text-romance-500"></i>
+            <span id="footer-couple-names">Muly &amp; Olcay</span>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500 mt-2">Tüm anılarımız güvenle tarayıcımızda saklanıyor.</p>
+    </footer>
+
+    <!-- MODALLAR -->
+
+    <!-- 1. Ayarlar Modalı -->
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6 transform transition-all">
+            <div class="flex items-center justify-between border-b border-romance-100 dark:border-slate-700 pb-4">
+                <h3 class="font-serif text-2xl font-bold text-slate-800 dark:text-white">Sayfa Ayarları</h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="settings-form" onsubmit="saveSettings(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">İsimlerimiz</label>
+                    <input type="text" id="setting-names" required class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Başlangıç Tarihi ve Saati</label>
+                    <input type="datetime-local" id="setting-date" required class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeSettingsModal()" class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-romance-600 hover:bg-romance-800 text-white transition-colors shadow-md">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Fotoğraf Ekleme Modalı -->
+    <div id="photo-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-romance-100 dark:border-slate-700 pb-4">
+                <h3 class="font-serif text-2xl font-bold text-slate-800 dark:text-white">Yeni Polaroid Fotoğraf</h3>
+                <button onclick="closeAddPhotoModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="photo-form" onsubmit="addPhoto(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Fotoğraf URL Adresi</label>
+                    <input type="url" id="photo-url" required placeholder="https://ornek.com/fotograf.jpg" class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Not / Açıklama</label>
+                    <input type="text" id="photo-caption" required placeholder="Örn: İlk buluştuğumuz sahil..." class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddPhotoModal()" class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-romance-600 hover:bg-romance-800 text-white transition-colors shadow-md">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Geleceğe Mektup Ekleme Modalı -->
+    <div id="letter-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-romance-100 dark:border-slate-700 pb-4">
+                <h3 class="font-serif text-2xl font-bold text-slate-800 dark:text-white">Yeni Zaman Kapsülü Mektubu</h3>
+                <button onclick="closeLetterModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="letter-form" onsubmit="addLetter(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Kimden / Kime</label>
+                    <input type="text" id="letter-author" required placeholder="Örn: Olcay'dan Muly'e" class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Ne Zaman Açılsın?</label>
+                    <input type="datetime-local" id="letter-target-date" required class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Mektup İçeriği</label>
+                    <textarea id="letter-text-content" required rows="4" placeholder="Gelecekteki bize notların..." class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl p-4 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500 resize-none"></textarea>
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeLetterModal()" class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-romance-600 hover:bg-romance-800 text-white transition-colors shadow-md">Mührü Vur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Bucket List Ekleme Modalı -->
+    <div id="bucket-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-romance-100 dark:border-slate-700 pb-4">
+                <h3 class="font-serif text-2xl font-bold text-slate-800 dark:text-white">Yeni Hayal / Hedef Ekle</h3>
+                <button onclick="closeAddBucketModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="bucket-form" onsubmit="addBucketItem(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Ne yapmak istiyorsunuz?</label>
+                    <input type="text" id="bucket-text" required placeholder="Örn: Kapadokya'da balon turu yapmak..." class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddBucketModal()" class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-romance-600 hover:bg-romance-800 text-white transition-colors shadow-md">Listeye Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. Not Ekleme Modalı -->
+    <div id="note-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-romance-100 dark:border-slate-700 pb-4">
+                <h3 class="font-serif text-2xl font-bold text-slate-800 dark:text-white">Yeni Aşk Notu</h3>
+                <button onclick="closeAddNoteModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="note-form" onsubmit="addNote(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Notunuz</label>
+                    <textarea id="note-content" required rows="4" placeholder="İçinden gelen tatlı bir söz yaz..." class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl p-4 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">İmza / Gönderen</label>
+                    <input type="text" id="note-author" required placeholder="Örn: Sevgilin O." class="w-full bg-romance-50/50 dark:bg-slate-900 border border-romance-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-romance-500">
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddNoteModal()" class="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">İptal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-semibold bg-romance-600 hover:bg-romance-800 text-white transition-colors shadow-md">Notu Bırak</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. Fotoğraf Önizleme (Lightbox) Modalı -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white hover:text-romance-200 p-2">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Büyük Görsel" class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border-4 border-white dark:border-slate-700">
+            <p id="lightbox-caption" class="font-handwriting text-2xl text-white mt-4 text-center"></p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT KODLARI -->
+    <script>
+        // Varsayılan Veriler ve LocalStorage Yönetimi
+        const DEFAULT_SETTINGS = {
+            names: "Muly & Olcay",
+            startDate: "2026-03-14T00:08",
+            mood: "😍 Aşık",
+            darkMode: false
+        };
+
+        const DEFAULT_LETTERS = [
+            {
+                id: 1,
+                author: "Olcay'dan Muly'e",
+                targetDate: "2027-03-14T00:08",
+                content: "Güzel sevgilim, bu mektubu okuyorsan muhtemelen harika anılar biriktirmeye devam ediyoruzdur. Seni ilk günkü gibi çok seviyorum!"
+            }
+        ];
+
+        const DEFAULT_PHOTOS = [
+            { id: 1, url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600&auto=format&fit=crop&q=80", caption: "İlk buluşma günümüz <3" },
+            { id: 2, url: "https://images.unsplash.com/photo-1529634896584-b7583f203033?w=600&auto=format&fit=crop&q=80", caption: "Unutulmaz tatil anısı" },
+            { id: 3, url: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&auto=format&fit=crop&q=80", caption: "Birlikte kahve keyfi" }
+        ];
+
+        const DEFAULT_BUCKET = [
+            { id: 1, text: "Kapadokya'da gün doğumunda balon turu yapmak", completed: true },
+            { id: 2, text: "Kuzey Işıkları'nı (Aurora) birlikte izlemek", completed: false },
+            { id: 3, text: "İtalya'da sokak arasında orijinal Napoli pizzası yemek", completed: false }
+        ];
+
+        const DEFAULT_NOTES = [
+            { id: 1, content: "İyi ki hayatımdasın, seninle geçen her gün bir mucize gibi.", author: "Olcay", date: "14 Mart" },
+            { id: 2, content: "Gülüşün dünyadaki en güzel melodi. Seni çok seviyorum!", author: "Muly", date: "20 Mart" }
+        ];
+
+        let settings = JSON.parse(localStorage.getItem('romance_settings')) || DEFAULT_SETTINGS;
+        let letters = JSON.parse(localStorage.getItem('romance_letters')) || DEFAULT_LETTERS;
+        let photos = JSON.parse(localStorage.getItem('romance_photos')) || DEFAULT_PHOTOS;
+        let bucketList = JSON.parse(localStorage.getItem('romance_bucket')) || DEFAULT_BUCKET;
+        let notes = JSON.parse(localStorage.getItem('romance_notes')) || DEFAULT_NOTES;
+
+        // Sayfa Yüklenince
+        window.onload = function() {
+            applySettingsToUI();
+            renderPhotos();
+            renderBucketList();
+            renderNotes();
+            renderLetters();
+            setInterval(updateCounters, 1000);
+            updateCounters();
+            lucide.createIcons();
+        };
+
+        // Gelişmiş Zaman Sayacı ve Yıl Dönümü Geri Sayımı
+        function updateCounters() {
+            const start = new Date(settings.startDate).getTime();
+            const now = new Date().getTime();
+            const diff = now - start;
+
+            let startDateObj = new Date(settings.startDate);
+            let nowObj = new Date();
+
+            if (diff >= 0) {
+                let years = nowObj.getFullYear() - startDateObj.getFullYear();
+                let months = nowObj.getMonth() - startDateObj.getMonth();
+                let days = nowObj.getDate() - startDateObj.getDate();
+                let hours = nowObj.getHours() - startDateObj.getHours();
+                let minutes = nowObj.getMinutes() - startDateObj.getMinutes();
+                let seconds = nowObj.getSeconds() - startDateObj.getSeconds();
+
+                if (seconds < 0) { seconds += 60; minutes--; }
+                if (minutes < 0) { minutes += 60; hours--; }
+                if (hours < 0) { hours += 24; days--; }
+                if (days < 0) {
+                    months--;
+                    let prevMonth = new Date(nowObj.getFullYear(), nowObj.getMonth(), 0);
+                    days += prevMonth.getDate();
+                }
+                if (months < 0) { years--; months += 12; }
+
+                days += 1;
+                months += 1;
+
+                document.getElementById('counter-years').innerText = years;
+                document.getElementById('counter-months').innerText = months;
+                document.getElementById('counter-days').innerText = days;
+                document.getElementById('counter-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('counter-minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('counter-seconds').innerText = String(seconds).padStart(2, '0');
+            }
+
+            const nextAnniversary = new Date(nowObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate());
+            if (nowObj > nextAnniversary) {
+                nextAnniversary.setFullYear(nextAnniversary.getFullYear() + 1);
+            }
+            const annivDiff = nextAnniversary.getTime() - nowObj.getTime();
+            const annivDays = Math.floor(annivDiff / (1000 * 60 * 60 * 24));
+            document.getElementById('anniversary-badge').innerText = `Yıl Dönümümüze Kalan: ${annivDays} Gün ❤︎`;
+        }
+
+        function applySettingsToUI() {
+            document.getElementById('nav-couple-names').innerText = settings.names;
+            document.getElementById('hero-title').innerHTML = settings.names.replace('&', '<span class="text-romance-500 font-normal italic">&amp;</span>');
+            document.getElementById('footer-couple-names').innerText = settings.names;
+            document.getElementById('mood-select').value = settings.mood;
+
+            if (settings.darkMode) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
+        function changeMood(val) {
+            settings.mood = val;
+            localStorage.setItem('romance_settings', JSON.stringify(settings));
+        }
+
+        function toggleDarkMode() {
+            settings.darkMode = !settings.darkMode;
+            localStorage.setItem('romance_settings', JSON.stringify(settings));
+            applySettingsToUI();
+
+            if (settings.darkMode) {
+                const toast = document.getElementById('star-toast');
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 4000);
+            }
+        }
+
+        // --- GELECEĞE MEKTUPLAR (ZAMAN KAPSÜLLERİ) İŞLEMLERİ ---
+        function renderLetters() {
+            const container = document.getElementById('letters-container');
+            container.innerHTML = '';
+            const now = new Date().getTime();
+
+            letters.forEach(letter => {
+                const target = new Date(letter.targetDate).getTime();
+                const diff = target - now;
+                const card = document.createElement('div');
+                card.className = "p-6 rounded-3xl bg-romance-50/50 dark:bg-slate-800/50 border border-romance-200 dark:border-slate-700 flex flex-col justify-between relative shadow-sm hover:shadow-md transition-all";
+
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-romance-800 dark:text-romance-300">— ${letter.author}</span>
+                            <button onclick="deleteLetter(${letter.id})" class="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center text-center space-y-3 py-6">
+                            <i data-lucide="lock" class="w-8 h-8 text-romance-500 animate-bounce"></i>
+                            <h4 class="font-serif text-lg font-bold text-slate-800 dark:text-white">Mühürlü Mektup</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Açılma: ${new Date(letter.targetDate).toLocaleString('tr-TR')}</p>
+                            <div class="bg-romance-100 dark:bg-slate-700 text-romance-800 dark:text-romance-200 px-3 py-1.5 rounded-full font-semibold text-xs">
+                                Kalan: ${days} gün ${hours} saat
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-romance-800 dark:text-romance-300">— ${letter.author}</span>
+                            <button onclick="deleteLetter(${letter.id})" class="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3 py-2">
+                            <div class="inline-flex items-center space-x-1.5 text-romance-600 dark:text-romance-400 font-semibold text-xs">
+                                <i data-lucide="unlock" class="w-4 h-4"></i>
+                                <span>Zaman Kapsülü Açıldı</span>
+                            </div>
+                            <p class="font-handwriting text-2xl text-slate-800 dark:text-slate-200 leading-relaxed">"${letter.content}"</p>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openLetterModal() {
+            document.getElementById('letter-form').reset();
+            document.getElementById('letter-modal').classList.remove('hidden');
+        }
+        function closeLetterModal() { document.getElementById('letter-modal').classList.add('hidden'); }
+
+        function addLetter(e) {
+            e.preventDefault();
+            const author = document.getElementById('letter-author').value;
+            const targetDate = document.getElementById('letter-target-date').value;
+            const content = document.getElementById('letter-text-content').value;
+            const newLetter = { id: Date.now(), author, targetDate, content };
+            letters.unshift(newLetter);
+            localStorage.setItem('romance_letters', JSON.stringify(letters));
+            renderLetters();
+            closeLetterModal();
+        }
+
+        function deleteLetter(id) {
+            letters = letters.filter(l => l.id !== id);
+            localStorage.setItem('romance_letters', JSON.stringify(letters));
+            renderLetters();
+        }
+
+        // --- FOTOĞRAF GALERİSİ İŞLEMLERİ ---
+        function renderPhotos() {
+            const grid = document.getElementById('photo-grid');
+            grid.innerHTML = '';
+            photos.forEach(photo => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 p-4 pb-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-romance-100 dark:border-slate-700 flex flex-col group relative";
+                card.innerHTML = `
+                    <div class="relative overflow-hidden rounded-xl aspect-square bg-romance-50 dark:bg-slate-900 cursor-pointer" onclick="openLightbox('${photo.url}', '${photo.caption}')">
+                        <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x600/fbeef1/d96b84?text=Fotoğraf+Bulunamadı'">
+                        <div class="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i data-lucide="zoom-in" class="w-8 h-8 text-white drop-shadow-md"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between">
+                        <p class="font-handwriting text-xl text-slate-800 dark:text-slate-200 px-1 truncate">${photo.caption}</p>
+                        <button onclick="deletePhoto(${photo.id})" class="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function addPhoto(e) {
+            e.preventDefault();
+            const url = document.getElementById('photo-url').value;
+            const caption = document.getElementById('photo-caption').value;
+            const newPhoto = { id: Date.now(), url, caption };
+            photos.unshift(newPhoto);
+            localStorage.setItem('romance_photos', JSON.stringify(photos));
+            renderPhotos();
+            closeAddPhotoModal();
+            document.getElementById('photo-form').reset();
+        }
+
+        function deletePhoto(id) {
+            photos = photos.filter(p => p.id !== id);
+            localStorage.setItem('romance_photos', JSON.stringify(photos));
+            renderPhotos();
+        }
+
+        // --- BUCKET LIST İŞLEMLERİ ---
+        function renderBucketList() {
+            const container = document.getElementById('bucket-container');
+            container.innerHTML = '';
+            bucketList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${item.completed ? 'bg-romance-50/60 dark:bg-slate-800/40 border-romance-200 dark:border-slate-700 opacity-80' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md'}`;
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3.5 cursor-pointer flex-1" onclick="toggleBucketItem(${item.id})">
+                        <div class="w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${item.completed ? 'bg-romance-500 text-white' : 'border-2 border-romance-300 dark:border-slate-600 bg-white dark:bg-slate-900'}">
+                            ${item.completed ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+                        </div>
+                        <span class="text-sm sm:text-base font-medium ${item.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'}">${item.text}</span>
+                    </div>
+                    <button onclick="deleteBucketItem(${item.id})" class="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition-colors ml-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function addBucketItem(e) {
+            e.preventDefault();
+            const text = document.getElementById('bucket-text').value;
+            const newItem = { id: Date.now(), text, completed: false };
+            bucketList.push(newItem);
+            localStorage.setItem('romance_bucket', JSON.stringify(bucketList));
+            renderBucketList();
+            closeAddBucketModal();
+            document.getElementById('bucket-form').reset();
+        }
+
+        function toggleBucketItem(id) {
+            bucketList = bucketList.map(item => item.id === id ? { ...item, completed: !item.completed } : item);
+            localStorage.setItem('romance_bucket', JSON.stringify(bucketList));
+            renderBucketList();
+        }
+
+        function deleteBucketItem(id) {
+            bucketList = bucketList.filter(item => item.id !== id);
+            localStorage.setItem('romance_bucket', JSON.stringify(bucketList));
+            renderBucketList();
+        }
+
+        // --- AŞK NOTLARI İŞLEMLERİ ---
+        function renderNotes() {
+            const grid = document.getElementById('notes-grid');
+            grid.innerHTML = '';
+            notes.forEach(note => {
+                const card = document.createElement('div');
+                card.className = "bg-gradient-to-br from-romance-100/60 to-purple-50/60 dark:from-slate-800 dark:to-purple-950/40 backdrop-blur-sm p-6 rounded-3xl shadow-sm hover:shadow-md border border-romance-200/60 dark:border-slate-700 flex flex-col justify-between relative group";
+                card.innerHTML = `
+                    <div class="absolute top-4 right-4 text-romance-400 group-hover:text-romance-600 transition-colors">
+                        <i data-lucide="heart" class="w-5 h-5 fill-romance-200 dark:fill-slate-700"></i>
+                    </div>
+                    <div class="space-y-4 mb-6">
+                        <p class="font-handwriting text-2xl text-slate-800 dark:text-slate-200 leading-relaxed">"${note.content}"</p>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-romance-200/40 dark:border-slate-700 pt-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-romance-800 dark:text-romance-300">— ${note.author}</span>
+                            <span class="text-xs text-slate-400">(${note.date})</span>
+                        </div>
+                        <button onclick="deleteNote(${note.id})" class="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function addNote(e) {
+            e.preventDefault();
+            const content = document.getElementById('note-content').value;
+            const author = document.getElementById('note-author').value;
+            const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+            const newNote = { id: Date.now(), content, author, date: today };
+            notes.unshift(newNote);
+            localStorage.setItem('romance_notes', JSON.stringify(notes));
+            renderNotes();
+            closeAddNoteModal();
+            document.getElementById('note-form').reset();
+        }
+
+        function deleteNote(id) {
+            notes = notes.filter(n => n.id !== id);
+            localStorage.setItem('romance_notes', JSON.stringify(notes));
+            renderNotes();
+        }
+
+        // --- MODAL YÖNETİCİLERİ ---
+        function openSettingsModal() {
+            document.getElementById('setting-names').value = settings.names;
+            document.getElementById('setting-date').value = settings.startDate;
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+        function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            settings.names = document.getElementById('setting-names').value;
+            settings.startDate = document.getElementById('setting-date').value;
+            localStorage.setItem('romance_settings', JSON.stringify(settings));
+            applySettingsToUI();
+            updateCounters();
+            closeSettingsModal();
+        }
+
+        function openAddPhotoModal() { document.getElementById('photo-modal').classList.remove('hidden'); }
+        function closeAddPhotoModal() { document.getElementById('photo-modal').classList.add('hidden'); }
+
+        function openAddBucketModal() { document.getElementById('bucket-modal').classList.remove('hidden'); }
+        function closeAddBucketModal() { document.getElementById('bucket-modal').classList.add('hidden'); }
+
+        function openAddNoteModal() { document.getElementById('note-modal').classList.remove('hidden'); }
+        function closeAddNoteModal() { document.getElementById('note-modal').classList.add('hidden'); }
+
+        function openLightbox(url, caption) {
+            document.getElementById('lightbox-img').src = url;
+            document.getElementById('lightbox-caption').innerText = caption;
+            document.getElementById('lightbox-modal').classList.remove('hidden');
+        }
+        function closeLightbox() { document.getElementById('lightbox-modal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
